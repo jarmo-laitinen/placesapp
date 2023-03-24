@@ -1,0 +1,70 @@
+{
+   "openapi":"3.0.0",
+   "info":{
+      "title":"Places App API",
+      "version":"1.0.0",
+      "description":"Places App API Documentation"
+   },
+   "servers":[
+      {
+         "url":"http://localhost:3001"
+      }
+   ],
+   "paths":{
+      "/api/places": {
+         "get": {
+            "summary":"Returns a list of all Places",
+            "responses":{
+               "200":{
+                  "description":"Successfully returned a list of all Places",
+                  "content":{
+                     "application/json": {
+                        "schema":{
+                           "description":"List of places",
+                           "type":"array",
+                           "items":{
+                              "type":"object",
+                              "properties":{
+                                 "ID":{
+                                    "type":"integer",
+                                    "description":"The ID of the Place"
+                                 },
+                                 "Name":{
+                                    "type":"string",
+                                    "description":"The name of the Place"
+                                 },
+                                 "UserName":{
+                                    "type":"string",
+                                    "description":"The name of the user who created the Place"
+                                 },
+                                 "UserID":{
+                                    "type":"integer",
+                                    "description":"The ID of the user who created the Place"
+                                 },
+                                 "Latitude":{
+                                    "type":"number",
+                                    "description":"The latitude of the Place"
+                                 },
+                                 "Longitude":{
+                                    "type":"number",
+                                    "description":"The longitude of the Place"
+                                 }
+                              },
+                              "example":{
+                                 "ID":1,
+                                 "Name":"Some place",
+                                 "UserID":1,
+                                 "UserName":"Radu",
+                                 "Latitude":10.123,
+                                 "Longitude":32.012
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+}

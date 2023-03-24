@@ -1,0 +1,299 @@
+openapi: 3.0.0
+info:
+  title: Places App
+  version: 1.0.0
+  description: Places App Documentation
+servers:
+- url: http://localhost:3001/
+paths:
+  "/api/places":
+    get:
+      summary: Returns the list of all places
+      responses:
+        '200':
+          description: Successfully returned a list of all places
+          content:
+            application/json:
+              schema:
+                description: List of places
+                type: array
+                items:
+                  $ref: '#/components/schemas/Place'
+        '204':
+          description: No places exist
+        '404':
+          description: Server Error or no data is available
+    post:
+      summary: Create new place
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaceToBeAdded'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: The new place was created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+        '401': 
+          description: Unauthorized action
+        '404':
+          description: Server error
+  "/api/places/{id}":
+    get:
+      summary: Get place by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Numeric ID to find the information about place
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Place was found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+        '400':
+          description: Invalid format of ID
+        '404':
+          description: Server error or place with given ID is not found
+    delete:
+      summary: Delete place by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Numeric ID to find the place to delete
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Place was deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+        '400':
+          description: Invalid format of ID
+        '401':
+          description: Unauthorized action
+        '404':
+          description: Server error or place to delete is not found
+  "/api/users":
+    post:
+      summary: Create new user
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserToBeAdded'
+      responses:
+        '200':
+          description: The new user was created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Server error
+    get:
+      summary: Returns the list of all users
+      responses:
+        '200':
+          description: Successfully returned a list of all users
+          content:
+            application/json:
+              schema:
+                description: List of users
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '204':
+          description: No users exist
+        '404':
+          description: Server Error or users were not found
+  "/api/users/id/{id}":
+    get:
+      summary: Get user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Numeric ID to find the information about user
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User was found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid format of ID
+        '404':
+          description: Server error or user was not found
+  "/api/users/name/{name}":
+    get:
+      summary: Get user by name
+      parameters:
+        - in: path
+          name: name
+          required: true
+          description: String name to find the information about user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User was found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid format of name
+        '404':
+          description: Server error or user was not found
+  "/api/login":
+    post:
+      summary: Login page
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the user
+                password:
+                  type: string
+                  description: User's password
+              example:
+                name: Radu
+                password: password
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Login was successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ID:
+                    type: integer
+                    description: User's ID
+                  Name:
+                    type: string
+                    description: Name of the user
+                  token:
+                    type: string
+                    description: Created token
+                example:
+                  ID: 4
+                  Name: Tanja
+                  token: someExampleToken
+        '401': 
+          description: Unauthorized action
+        '404':
+          description: Server error or no user with such name
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        ID:
+          type: integer
+          description: ID of the user
+        Name:
+          type: string
+          description: Name of the user
+        Password:
+          type: string
+          description: User's password
+      example:
+        ID: 4
+        Name: Tanja
+        Password: ABCDEF16
+    PlaceToBeAdded:
+      type: object
+      properties:
+        name: 
+          type: string
+          description: Name of new place
+        userId: 
+          type: integer
+          description: ID of the user who creates new place
+        latitude: 
+          type: number
+          description: Latitude of new place
+        longitude: 
+          type: number
+          description: Longitude of new place
+      example:
+        name: New italian restaurant
+        userId: 1
+        latitude: 12.121
+        longitude: 23.321
+    UserToBeAdded:
+      type: object
+      properties:
+        name: 
+          type: string
+          description: user name
+        password: 
+          type: string
+          description: user password
+      example:
+        name: Radu
+        password: udar
+    Place:
+      type: object
+      properties:
+        ID:
+          type: integer
+          description: ID of the place
+        Name:
+          type: string
+          description: Name of the place
+        UserID:
+          type: integer
+          description: ID of the user who created the place
+        Latitude:
+          type: number
+          description: Latitude of the place
+        Longitude:
+          type: number
+          description: Longitude of the place
+        UserName:
+          type: string
+          description: Name of the user who created the place
+      example:
+          ID: 1
+          Name: University library
+          UserID: 1
+          Latitude: 12.345
+          Longitude: 23.456
+          UserName: Radu
+
+  
+

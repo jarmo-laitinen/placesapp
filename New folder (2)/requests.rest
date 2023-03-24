@@ -1,0 +1,39 @@
+GET http://localhost:3001/api/places
+###
+GET http://localhost:3001/api/places/22
+###
+DELETE http://localhost:3001/api/places/22
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MiwiTmFtZSI6Ikp5cmkiLCJpYXQiOjE2Njk3OTI5Njd9.XwRRDP7Lds8g1b-3p-4PhQTkMGcqhZoojJcCHsTR0Ww
+###
+POST http://localhost:3001/api/places
+content-type:application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MzEsIk5hbWUiOiJOZXcgVXNlcjEiLCJpYXQiOjE2NzAyMzU0MTZ9.2CiOT3GKW0IMgzLCKc-KqunwcDPg5OQ5ppDgwyDtk0s
+
+{
+   "name":"New User's Place",
+   "userId":31,
+   "latitude":10.1234,
+   "longitude":20.2345
+}
+###
+POST http://localhost:3001/api/login
+content-type:application/json
+
+{
+   "name":"New User2",
+   "password":"1111"
+}
+###
+GET http://localhost:3001/api/users
+###
+GET http://localhost:3001/api/users/3
+###
+GET http://localhost:3001/api/users/names/Radu
+###
+POST http://localhost:3001/api/users
+content-type:application/json
+
+{
+   "name":"New User2",
+   "password":"1111"
+}
